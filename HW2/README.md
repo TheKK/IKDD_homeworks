@@ -8,7 +8,7 @@ Dependency
 
 Use
 -----
-Just execute 'HW2/IKDDhw2.py' and enjoy the magic
+Just execute 'IKDDhw2.py' and enjoy the magic
 
 Author
 ------
