@@ -12,8 +12,8 @@ Just execute 'IKDDhw2.py' and enjoy the magic
 
 Author
 ------
-[anarchih](https://github.com/anarchih)
-[TheKK](https://github.com/thekk)
+* [anarchih](https://github.com/anarchih)
+* [TheKK](https://github.com/thekk)
 
 License
 -------
