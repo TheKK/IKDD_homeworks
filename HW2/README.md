@@ -14,6 +14,7 @@ Author
 ------
 * [anarchih](https://github.com/anarchih)
 * [TheKK](https://github.com/thekk)
+* [shinshipower](https://github.com/shinshipower)
 
 License
 -------
