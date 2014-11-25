@@ -9,7 +9,7 @@ Dependency
 
 Use
 -----
-Just execute 'python3 ./HW2/IKDDhw4.py' and enjoy the magic
+Just execute 'python3 ./HW4/IKDDhw4.py' and enjoy the magic
 
 Author
 ------
