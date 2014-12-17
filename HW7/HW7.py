@@ -27,6 +27,7 @@ for line in rawData_str:
     friendId = int(searchResult.group())
     relationshipList[userId].append(friendId)
 
+## Start iteration
 def getUserIdWhoHasLotsFriends(inputList, activedSet):
     maxFriendCount = 0;
     toReturn = 0;
@@ -36,7 +37,6 @@ def getUserIdWhoHasLotsFriends(inputList, activedSet):
             maxFriendCount = len(inputList[i])
     return toReturn
 
-## Start iteration
 topTenSet = set()
 activedSet = set()
 comboSet = set()
