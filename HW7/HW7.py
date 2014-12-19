@@ -31,30 +31,41 @@ for line in rawData_str:
 def getUserIdWhoHasLotsFriends(inputList, activedSet):
     maxFriendCount = 0;
     toReturn = 0;
+    friendSet = set()
     for i in range(0, len(inputList)):
-        if (len(inputList[i]) > maxFriendCount) and (i not in activedSet):
+        if i in activedSet:
+            continue
+        friendSet.clear()
+        ## Import all i's friends to a set
+        for friend in inputList[i]:
+            friendSet.add(friend)
+        friendSet = friendSet - activedSet
+        if (len(friendSet) > maxFriendCount):
             toReturn = i
-            maxFriendCount = len(inputList[i])
+            maxFriendCount = len(friendSet)
     return toReturn
 
 topTenSet = set()
 activedSet = set()
-comboSet = set()
+readySet = set()
+prograss = []
 
 for i in range(0, SET_S_COUNT):
     theFirstOne = getUserIdWhoHasLotsFriends(relationshipList, activedSet)
-    comboSet.add(theFirstOne)
     topTenSet.add(theFirstOne)
-    while len(comboSet) > 0:
-        theNext = comboSet.pop();
+    readySet.add(theFirstOne)
+    while len(readySet) > 0:
+        theNext = readySet.pop();
         if theNext in activedSet:
             continue
         else:
             activedSet.add(theNext);
         for friend in relationshipList[theNext]:
             if random.random() <= PROPOGATION_PROBABILITY:
-                comboSet.add(friend)
+                readySet.add(friend)
+    prograss.append(len(activedSet))
 
 print('Total user: ' + str(userCount))
 print('Actived user: ' + str(len(activedSet)))
 print('Top 10 seed: ' + str(topTenSet))
+print('Prograss: ' + str(prograss))
