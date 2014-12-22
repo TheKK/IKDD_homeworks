@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 SET_S_COUNT = 10
-ITERATION_COUNT = 10
+ITERATION_COUNT = 1
 PROPOGATION_PROBABILITY = 0.1
 
 ## Read data sheet
@@ -27,33 +27,35 @@ for line in rawData_str:
     friendId = int(searchResult.group())
     relationshipList[userId].append(friendId)
 
-## Start iteration
-def getUserIdWhoHasLotsFriends(inputList, activedSet):
-    maxFriendCount = 0;
-    toReturn = 0;
-    friendSet = set()
-    for i in range(0, len(inputList)):
-        if i in activedSet:
-            continue
-        friendSet.clear()
-        ## Import all i's friends to a set
-        for friend in inputList[i]:
-            friendSet.add(friend)
-        friendSet = friendSet - activedSet
-        if (len(friendSet) > maxFriendCount):
-            toReturn = i
-            maxFriendCount = len(friendSet)
-    return toReturn
+## Get set S
+valueList = []
+for user in range(0, userCount):
+    valueSum = 0
+    averageValue = 0
+    for i in range(0, ITERATION_COUNT):
+        for friend in relationshipList[user]:
+            if (random.random() <= PROPOGATION_PROBABILITY):
+                valueSum += 1
+    averageValue = valueSum / ITERATION_COUNT
+    valueList.append(averageValue)
 
-topTenSet = set()
+setS = set()
+for i in range(0, SET_S_COUNT):
+    maxValue = 0
+    maxUser = 0
+    for user in range(0, userCount):
+        if ((valueList[user] > maxValue) and (user not in setS)):
+            maxValue = valueList[user]
+            maxUser = user
+    setS.add(maxUser)
+
+## Calculate f(S)
 activedSet = set()
 readySet = set()
 prograss = []
 
-for i in range(0, SET_S_COUNT):
-    theFirstOne = getUserIdWhoHasLotsFriends(relationshipList, activedSet)
-    topTenSet.add(theFirstOne)
-    readySet.add(theFirstOne)
+for seed in setS:
+    readySet.add(seed)
     while len(readySet) > 0:
         theNext = readySet.pop();
         if theNext in activedSet:
@@ -67,5 +69,5 @@ for i in range(0, SET_S_COUNT):
 
 print('Total user: ' + str(userCount))
 print('Actived user: ' + str(len(activedSet)))
-print('Top 10 seed: ' + str(topTenSet))
+print("set S: " + str(setS))
 print('Prograss: ' + str(prograss))
