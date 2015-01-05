@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 SET_S_COUNT = 10
-ITERATION_COUNT = 1000
+ITERATION_COUNT = 1
 PROPOGATION_PROBABILITY = 0.1
 
 ## Read data sheet
@@ -27,47 +27,52 @@ for line in rawData_str:
     friendId = int(searchResult.group())
     relationshipList[userId].append(friendId)
 
-## Get set S
-valueList = []
-for user in range(0, userCount):
-    valueSum = 0
-    averageValue = 0
-    for i in range(0, ITERATION_COUNT):
-        for friend in relationshipList[user]:
-            if (random.random() <= PROPOGATION_PROBABILITY):
-                valueSum += 1
-    averageValue = valueSum / ITERATION_COUNT
-    valueList.append(averageValue)
-
-setS = set()
-for i in range(0, SET_S_COUNT):
-    maxValue = 0
-    maxUser = 0
-    for user in range(0, userCount):
-        if ((valueList[user] > maxValue) and (user not in setS)):
-            maxValue = valueList[user]
-            maxUser = user
-    setS.add(maxUser)
-
-## Calculate f(S)
+## Caculate f(s) of each user node
 activedSet = set()
-readySet = set()
+setS = set()
 prograss = []
 
-for seed in setS:
-    readySet.add(seed)
+for round in range(0, SET_S_COUNT):
+    valueList = []
+    ## Try everyone
+    for user in range(0, userCount):
+        totalActiveNum = 0
+        averageActiveNum = 0
+        for i in range(0, ITERATION_COUNT):
+            readySet = set()
+            testActivedSet = activedSet.copy()
+            readySet.add(i)
+            while len(readySet) > 0:
+                toActive = readySet.pop()
+                if toActive in testActivedSet:
+                    continue
+                testActivedSet.add(toActive)
+                for friend in relationshipList[toActive]:
+                    if (random.random() <= PROPOGATION_PROBABILITY):
+                        readySet.add(friend)
+            totalActiveNum += len(testActivedSet)
+        averageActiveNum = totalActiveNum / ITERATION_COUNT
+        valueList.append(averageActiveNum)
+    ## Find the most powerful user
+    for user in range(0, userCount):
+        maxInfluence = 0
+        candidate = 0
+        if (valueList[i] > maxInfluence) and (i not in setS):
+            candidate = i
+            maxInfluence = valueList[i]
+    setS.add(candidate)
+    ## Do real play
+    readySet = set()
+    readySet.add(i)
     while len(readySet) > 0:
-        theNext = readySet.pop();
-        if theNext in activedSet:
+        toActive = readySet.pop()
+        if toActive in activedSet:
             continue
-        else:
-            activedSet.add(theNext);
-        for friend in relationshipList[theNext]:
-            if random.random() <= PROPOGATION_PROBABILITY:
+        activedSet.add(toActive)
+        for friend in relationshipList[toActive]:
+            if (random.random() <= PROPOGATION_PROBABILITY):
                 readySet.add(friend)
     prograss.append(len(activedSet))
 
-print('Total user: ' + str(userCount))
-print('Actived user: ' + str(len(activedSet)))
-print("set S: " + str(setS))
-print('Prograss: ' + str(prograss))
+print(setS)
+print(prograss)
