@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 SET_S_COUNT = 10
-ITERATION_COUNT = 1
+ITERATION_COUNT = 1000
 PROPOGATION_PROBABILITY = 0.1
 
 ## Read data sheet
