@@ -8,7 +8,7 @@ Dependency
 
 About
 -----
-Comming soon...
+Just change gini to entropy, nothing special
 
 Author
 ------
@@ -18,4 +18,4 @@ Author
 
 License
 -------
-This program is licensed under [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)
+This program is licensed under [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html)
