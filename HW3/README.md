@@ -9,7 +9,7 @@ Dependency
 
 Use
 ---
-Just execute 'python3 ./HW3/recommend.py' and 'python3 ./HW3/word_count.py' then enjoy the magic
+Just execute 'spark-submit ./HW3/recommend.py' and 'spark-submit ./HW3/word_count.py' then enjoy the magic
 
 Author
 ------
