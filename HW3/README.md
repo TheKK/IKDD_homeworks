@@ -9,7 +9,14 @@ Dependency
 
 Use
 ---
-Just execute 'spark-submit ./HW3/recommend.py' and 'spark-submit ./HW3/word_count.py' then enjoy the magic
+Just execute
+
+~~~ sh
+$ spark-submit ./HW3/recommend.py
+$ spark-submit ./HW3/word_count.py
+~~~
+
+then enjoy the magic
 
 You can change the input by editing the lists named "movie" and "grade" in file ./HW3/recommend.py
 
