@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <style media="screen">
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: black;
+                shape-rendering: crispEdges;
+            }
+
+            .axis text {
+                font-family: sans-serif;
+                font-size: 11px;
+            }
+        </style>
+	<script src="csvtojson.json"></script>
+        <script src="d3/d3.min.js"></script>
+        <script charset="utf-8" src="d3/jquery-1.11.2.js"></script>
+
+        <script>
+            function Rect(x, y, color, width, height){
+                this.default_x = x;
+                this.default_y = y;
+                this.d3;
+                this._x = x;
+                this._y = y;
+                this._color = color;
+                this._width = width;
+                this._height = height;
+                this.set_attr = function(){
+                    this.d3.attr("x", this._x);
+                    this.d3.attr("y", this._y);
+                    this.d3.attr("fill", this._color);
+                    this.d3.attr("width", this._width);
+                    this.d3.attr("height", this._height);
+                }
+            }
+
+            var status = 'male'
+            var dataset;
+
+            var r1 = new Rect(100, 400, "red", 50, 0);
+            var r2 = new Rect(200, 400, "green", 50, 0);
+
+
+
+            function load(){
+                // Load Data into variable dataset
+                
+                //    dataset = data;
+                    main();
+                
+		
+            function main(){
+                r1.d3 = d3.select("svg").append("rect");
+                r1.set_attr();
+
+                r2.d3 = d3.select("svg").append("rect");
+                r2.set_attr();
+
+                draw_axes();
+                change();
+            }
+
+            }
+            function change(){
+                var surv;
+                switch(status){
+                    case 'male':
+                        surv = calculate('Sex', 'male');
+                        change_bar(r1, surv[0] / 2);
+                        change_bar(r2, surv[1] / 2);
+                        d3.select("#head").text("male")
+                        status = 'female';
+                        break;
+                    case 'female':
+                        surv = calculate('Sex', 'female');
+                        change_bar(r1, surv[0] / 2);
+                        change_bar(r2, surv[1] / 2);
+                        d3.select("#head").text("female")
+                        status = 'S';
+                        break;
+                    case 'S':
+                        surv = calculate('Embarked', 'S');
+                        change_bar(r1, surv[0] / 2);
+                        change_bar(r2, surv[1] / 2);
+                        d3.select("#head").text("Embarked : S")
+                        status = 'Q';
+                        break;
+                    case 'Q':
+                        surv = calculate('Embarked', 'Q');
+                        change_bar(r1, surv[0] / 2);
+                        change_bar(r2, surv[1] / 2);
+                        d3.select("#head").text("Embarked : Q")
+                        status = 'C';
+                        break;
+                    case 'C':
+                        surv = calculate('Embarked', 'C');
+                        change_bar(r1, surv[0] / 2);
+                        change_bar(r2, surv[1] / 2);
+                        d3.select("#head").text("Embarked : C")
+                        status = 'male';
+                        break;
+                }
+            }
+            function calculate(_class, value){
+                surv = [0, 0]
+                for (var i=0; i<dataset.length; i++){
+                    if (dataset[i][_class] == value && dataset[i]['Survived'] == '0'){
+                        surv[0] ++;
+                    }
+                    if (dataset[i][_class] == value && dataset[i]['Survived'] == '1'){
+                        surv[1] ++;
+                    }
+                }
+                return surv;
+            }
+            function change_bar(r, height, duration){
+                var duration = typeof duration !== 'undefined' ? duration : 250;
+                var rect_y = r.d3.attr("y");
+                var rect_h = r.d3.attr("height");
+                var diff = parseInt(rect_h) - height;
+                r.d3.transition().duration(duration).attr("height", height).attr("y", parseInt(rect_y) + diff + 1)
+            }
+            function draw_axes(){
+                var svgContainer = d3.select("svg")
+                var axisScale = d3.scale.linear()
+                .domain([600, 0])
+                .range([100, 400]);
+                //Create the Axis
+                var yAxis = d3.svg.axis()
+                .scale(axisScale).orient("left");
+
+                var yAxisGroup = svgContainer.append("g")
+                .attr("transform", "translate(" + "50" + ", 0)")
+                .attr("class", "axis")
+                .call(yAxis);
+
+                a = d3.select("svg").append("text")      // text label for the y axis
+                .attr("x", 175 )
+                .attr("y", 90 )
+                .attr("id", "head")
+                .style("text-anchor", "middle")
+                .text("male");
+
+                d3.select("svg").append("text")      // text label for the y axis
+                .attr("x", 15 )
+                .attr("y", 240 )
+                .style("text-anchor", "middle")
+                .text(" ");
+
+                d3.select("svg").append("text")      // text label for the x axis
+                .attr("x", 125 )
+                .attr("y", 420 )
+                .style("text-anchor", "middle")
+                .text("Died");
+
+                d3.select("svg").append("text")      // text label for the x axis
+                .attr("x", 225 )
+                .attr("y", 420 )
+                .style("text-anchor", "middle")
+                .text("Survived");
+            }
+        </script>
+    </head>
+    <body onload="load()">
+        <svg width="720" height="480" style="left:100px;">
+
+        </svg>
+        <button name="button" onclick="change()">change</button>
+        <div></div>
+    </body>
+</html>
